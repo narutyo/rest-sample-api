@@ -11,7 +11,7 @@ class LoginController extends Controller
   public function login()
   {
     $query = http_build_query([
-        'client_id' => '3', // 作成したクライアントの「Cliend ID」を指定
+        'client_id' => config('auth_server.passport_client_id'),
         'redirect_uri' => config('auth_server.passport_callback'),
         'response_type' => 'code',
         'scope' => '',
@@ -21,14 +21,20 @@ class LoginController extends Controller
     return redirect(config('auth_server.passport_redirect').'/oauth/authorize?' . $query);
   }
 
+  public function logout()
+  {
+    session()->forget('access_token');
+    return redirect('/');
+  }
+
   public function callback(Request $request)
   {
     $http = new Client;
     $response = $http->post(config('auth_server.passport_api').'/oauth/token', [
         'form_params' => [
           'grant_type' => 'authorization_code',
-          'client_id' => '3', // 作成したクライアントの「Cliend ID」を指定
-          'client_secret' => 'hJ0AzuZ6kHlIMUAXUl9rYCi4HRSczLLdAelSjrmy', // 作成したクライアントの「Client secret」を指定
+          'client_id' => config('auth_server.passport_client_id'),
+          'client_secret' => config('auth_server.passport_client_secret'),
           'redirect_uri' => config('auth_server.passport_callback'),
           'code' => $request->input('code')
         ],
