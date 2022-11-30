@@ -33,6 +33,10 @@ class RouteServiceProvider extends ServiceProvider
                 ->prefix('api')
                 ->group(base_path('routes/api.php'));
 
+            Route::middleware('gemba')
+                ->prefix('rest')
+                ->group(base_path('routes/gemba.php'));
+
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));
         });
