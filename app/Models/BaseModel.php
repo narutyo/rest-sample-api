@@ -53,26 +53,28 @@ class BaseModel extends Model
   {
     $fillable = $this->getFillable();
     foreach($input as $data) {
+      $result = array_filter($data, function($element) use ($fillable) {
+        return in_array($element, $fillable);
+      }, ARRAY_FILTER_USE_KEY);
       $json = (!empty($data['json'])) ? json_decode($data['json'], true) : array();
+      $exists = $this->where('_documentId', $result['_documentId'])
+                    ->where('_pageId', $result['_pageId'])
+                    ->where('_objectId', $result['_objectId'])
+                    ->first();
       if (count($json)>0) {
-        $result = array_filter($data, function($element) use ($fillable) {
-          return in_array($element, $fillable);
-        }, ARRAY_FILTER_USE_KEY);
         $result = array_merge($result, 
           array_filter($json, function($element) use ($fillable) {
             return in_array($element, $fillable);
           }, ARRAY_FILTER_USE_KEY)
         );
 
-        $exists = $this->where('_documentId', $result['_documentId'])
-                      ->where('_pageId', $result['_pageId'])
-                      ->where('_objectId', $result['_objectId'])
-                      ->first();
         if (is_object($exists)) {
           $exists->update($result);
         } else {
           $this->create($result)->fresh();
         }
+      } elseif (is_object($exists)) {
+        $exists->delete();
       }
     }
     return;

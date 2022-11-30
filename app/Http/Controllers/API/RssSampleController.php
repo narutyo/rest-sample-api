@@ -9,18 +9,19 @@ use FeedReader;
 
 class RssSampleController extends Controller
 {
-  public function index()
+  public function index(Request $request)
   {
-    $tmp = FeedReader::read('https://www.gizmodo.jp/index.xml');
-    #$tmp = FeedReader::read('https://corp.itmedia.co.jp/media/rss_list/#_ga=2.15718966.1099176590.1669703540-1965403279.1669703540');
-
+    $url = $request->input('url');
     $ret = array();
-    foreach($tmp->get_items() as $feed) {
-      $ret[] = array(
-        'title' => $feed->get_title(),
-        'content' => $feed->get_content(),
-
-      );
+    if ($url) {
+      $tmp = FeedReader::read($url);
+      foreach($tmp->get_items() as $feed) {
+        $ret[] = array(
+          'title' => $feed->get_title(),
+          'content' => $feed->get_content(),
+  
+        );
+      }  
     }
     return array(
       'keys'  => ['title', 'content'],
