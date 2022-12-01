@@ -11,7 +11,7 @@ class SampleController extends Controller
   public function store(Request $request)
   {
     $obj = new Sample;
-    $obj->store($request->all());
+    $obj->bulkStore($request->all());
     return;
   }
 }

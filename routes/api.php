@@ -8,6 +8,8 @@ use App\Http\Controllers\API\Auth\ChangePasswordController;
 use App\Http\Controllers\API\Auth\ForgotPasswordController;
 use App\Http\Controllers\API\Auth\ResetPasswordController;
 
+use App\Http\Controllers\API\Sample\RssController;
+use App\Http\Controllers\API\Note\TemplateMasterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,14 +35,23 @@ Route::middleware(['api', 'cors'])->group(function () {
       Route::post("/logout", [LoginController::class,'logout']);
     });
 
-    /*
-    Route::prefix('/users')->group(function () {
-      Route::get('', [UserController::class, 'index']);
-      Route::get('/{user}', [UserController::class, 'show']);
-      Route::post('', [UserController::class, 'store']);
-      Route::put('/{user}', [UserController::class, 'update']);
+
+    Route::prefix('/sample')->group(function () {
+      Route::prefix('/rss')->group(function () {
+        Route::get('', [RssController::class, 'index']);
+      });
     });
-    */
+
+    Route::prefix('/note')->group(function () {
+      Route::prefix('/template')->group(function () {
+        Route::get('', [TemplateMasterController::class, 'index']);
+        Route::get('/{note_template}', [TemplateMasterController::class, 'show']);
+        Route::post('', [TemplateMasterController::class, 'store']);
+        Route::put('/{note_template}', [TemplateMasterController::class, 'update']);
+        Route::delete('/{note_template}', [TemplateMasterController::class, 'destroy']);
+      });
+    });
+
 
   });
 });

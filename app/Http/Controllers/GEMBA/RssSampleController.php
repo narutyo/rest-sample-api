@@ -32,7 +32,7 @@ class RssSampleController extends Controller
   public function store(Request $request)
   {
     $obj = new RssSample;
-    $obj->store($request->all());
+    $obj->bulkStore($request->all());
     return;
   }
 }
