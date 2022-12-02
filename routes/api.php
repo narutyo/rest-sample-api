@@ -10,6 +10,7 @@ use App\Http\Controllers\API\Auth\ResetPasswordController;
 
 use App\Http\Controllers\API\Sample\RssController;
 use App\Http\Controllers\API\Note\TemplateMasterController;
+use App\Http\Controllers\API\Note\AlignmentMasterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,6 +51,16 @@ Route::middleware(['api', 'cors'])->group(function () {
         Route::put('/{note_template}', [TemplateMasterController::class, 'update']);
         Route::delete('/{note_template}', [TemplateMasterController::class, 'destroy']);
       });
+
+      Route::prefix('/alignment')->group(function () {
+        Route::get('', [AlignmentMasterController::class, 'index']);
+        Route::get('/{note_alignment}', [AlignmentMasterController::class, 'show']);
+        Route::post('', [AlignmentMasterController::class, 'store']);
+        Route::put('/{note_alignment}', [AlignmentMasterController::class, 'update']);
+        Route::delete('/{note_alignment}', [AlignmentMasterController::class, 'destroy']);
+        Route::post('/callback', [AlignmentMasterController::class, 'callback']);
+      });
+
     });
 
 

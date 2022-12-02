@@ -11,20 +11,17 @@ class NoteTemplateMaster extends BaseModel
     public $table = self::TABLE_NAME;
 
     public const NAME = 'name';
-    public const ACCESS_ID = 'access_id';
     public const TEMPLATE_ID = 'template_id';
     public const FOLDER_URI = 'folder_uri';
 
     public $fillable = [
       self::NAME,
-      self::ACCESS_ID,
       self::TEMPLATE_ID,
       self::FOLDER_URI,
     ];
 
     protected $casts = [
       self::NAME => 'string',
-      self::ACCESS_ID => 'string',
       self::TEMPLATE_ID => 'string',
       self::FOLDER_URI => 'string',
     ];
@@ -32,7 +29,6 @@ class NoteTemplateMaster extends BaseModel
     public static function add($input)
     {
       $template = DB::transaction(function () use($input) {
-        $input[self::ACCESS_ID] = Str::random(26);
         $template = self::create($input)->fresh();
         return $template;
       });

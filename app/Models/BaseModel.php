@@ -48,7 +48,7 @@ class BaseModel extends Model
   ];
 
   protected $hidden = [
-    // self::ID,
+    self::ID,
     self::CREATED_BY,
     self::UPDATED_BY,
     self::DELETED_AT,

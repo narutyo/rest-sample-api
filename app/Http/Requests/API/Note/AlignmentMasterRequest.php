@@ -3,9 +3,9 @@
 namespace App\Http\Requests\API\Note;
 
 use App\Http\Requests\API\BaseRequest;
-use App\Models\NoteTemplateMaster;
+use App\Models\NoteAlignmentMaster;
 
-class TemplateMasterRequest extends BaseRequest
+class AlignmentMasterRequest extends BaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,9 +25,8 @@ class TemplateMasterRequest extends BaseRequest
     public function rules()
     {
         $rules = [
-          NoteTemplateMaster::NAME => 'required',
-          NoteTemplateMaster::TEMPLATE_ID => 'required',
-          NoteTemplateMaster::FOLDER_URI => 'required',
+          NoteAlignmentMaster::NAME => 'required',
+          NoteAlignmentMaster::NOTE_TEMPLATE_MASTER_ID => 'sometimes|required',
         ];
         return $rules;
     }

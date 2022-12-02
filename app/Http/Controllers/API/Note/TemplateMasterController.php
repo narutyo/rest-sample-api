@@ -89,4 +89,13 @@ class TemplateMasterController extends ApiBaseController
     {
       return $this->apiSpecBaseUrl . '/delete_NoteTemplateMaster';
     }
+
+    protected function search($criteria, $fields)
+    {
+      $data = $this->model->search($criteria);
+      if (!empty($criteria['filter_name'])) {
+        $data = $data->where('name', 'like', '%'.$criteria['filter_name'].'%');
+      }
+      return $data;
+    }
 }
