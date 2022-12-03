@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Laravel\Passport\Http\Controllers\AccessTokenController;
 
 use App\Http\Controllers\API\Auth\LoginController;
 use App\Http\Controllers\API\Auth\ChangePasswordController;
@@ -24,18 +25,17 @@ use App\Http\Controllers\API\Note\AlignmentMasterController;
 */
 
 Route::middleware(['api', 'cors'])->group(function () {
-  Route::post('/session/login', [LoginController::class, 'login']);
+  Route::post('/session/login', [AccessTokenController::class, 'issueToken']);
   Route::post('/password/forget', [ForgotPasswordController::class, 'sendResetLinkEmail']);
   Route::post('/password/reset', [ResetPasswordController::class, 'reset']);
 
-  Route::middleware('auth:sanctum')->group(function(){
+  Route::middleware('auth:api')->group(function(){
     Route::put('/password/change', [ChangePasswordController::class, 'update']);
 
     Route::prefix('/session')->group(function () {
       Route::get("/user", [LoginController::class,'me']);
       Route::post("/logout", [LoginController::class,'logout']);
     });
-
 
     Route::prefix('/sample')->group(function () {
       Route::prefix('/rss')->group(function () {
