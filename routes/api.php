@@ -70,8 +70,8 @@ Route::middleware(['api', 'cors'])->group(function () {
 });
 
 Route::middleware(['api'])->group(function () {
-  // Route::middleware('auth:api')->group(function(){
+  Route::middleware('auth:api')->group(function(){
     Route::get('/rss_sample', [RssSampleController::class, 'index']);
     Route::post('/rss_sample', [RssSampleController::class, 'store']);    
-  // });
+  });
 });
