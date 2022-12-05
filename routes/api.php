@@ -13,6 +13,8 @@ use App\Http\Controllers\API\Sample\RssController;
 use App\Http\Controllers\API\Note\TemplateMasterController;
 use App\Http\Controllers\API\Note\AlignmentMasterController;
 
+use App\Http\Controllers\GEMBA\RssSampleController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -65,4 +67,11 @@ Route::middleware(['api', 'cors'])->group(function () {
 
 
   });
+});
+
+Route::middleware(['api'])->group(function () {
+  // Route::middleware('auth:api')->group(function(){
+    Route::get('/rss_sample', [RssSampleController::class, 'index']);
+    Route::post('/rss_sample', [RssSampleController::class, 'store']);    
+  // });
 });

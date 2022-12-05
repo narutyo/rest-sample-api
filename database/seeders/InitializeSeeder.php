@@ -19,6 +19,13 @@ class InitializeSeeder extends Seeder
         // 初期ユーザー登録
         $user = new User;
         $user->fill([
+          'name'      => 'external',
+          'email'     => 'external@local',
+          'password'  => Hash::make('123456'),
+        ]);
+        $user->save();
+        $user = new User;
+        $user->fill([
           'name'      => 'admin',
           'email'     => 'admin@local',
           'password'  => Hash::make('123456'),
