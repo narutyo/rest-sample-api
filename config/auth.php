@@ -41,10 +41,14 @@ return [
             'provider' => 'users',
         ],
         'api' => [
-            'driver' => 'passport',
+            'driver' => 'sanctum',
             'provider' => 'users',
         ],
-  ],
+        'gemba' => [
+          'driver' => 'passport',
+          'provider' => 'user_sanctum',
+      ],
+],
 
     /*
     |--------------------------------------------------------------------------
@@ -68,6 +72,10 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
+        'user_sanctum' => [
+          'driver' => 'eloquent',
+          'model' => App\Models\UserSanctum::class,
+      ],
 
         // 'users' => [
         //     'driver' => 'database',
