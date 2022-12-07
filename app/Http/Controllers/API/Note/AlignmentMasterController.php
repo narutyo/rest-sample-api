@@ -73,6 +73,8 @@ class AlignmentMasterController extends ApiBaseController
     {
       Log::info('Start accept callback');
       try {
+        logger('header', $request->header());
+
         $tmpParam = $request->all();
         $param =  (!is_array($tmpParam)) ? $tmpParam : $tmpParam[0];
         $note_alignment = NoteAlignmentMaster::where('uuid', $param['internal_id'])->first();

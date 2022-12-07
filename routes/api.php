@@ -69,10 +69,8 @@ Route::middleware(['api', 'cors'])->group(function () {
   });
 });
 
-Route::middleware(['api'])->group(function () {
+Route::middleware(['api'])->prefix('/gemba')->group(function () {
   Route::middleware('auth:gemba')->group(function(){
-    Route::get("/user", [LoginController::class,'me']);
-    
     Route::get('/rss_sample', [RssSampleController::class, 'index']);
     Route::post('/rss_sample', [RssSampleController::class, 'store']);    
   });
