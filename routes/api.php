@@ -27,7 +27,8 @@ use App\Http\Controllers\GEMBA\RssSampleController;
 */
 
 Route::middleware(['api', 'cors'])->group(function () {
-  Route::post('/session/login', [LoginController::class, 'login']);
+  // Route::post('/session/login', [LoginController::class, 'login']);
+  Route::post('/session/login', [AccessTokenController::class, 'issueToken']);
   Route::post('/password/forget', [ForgotPasswordController::class, 'sendResetLinkEmail']);
   Route::post('/password/reset', [ResetPasswordController::class, 'reset']);
 
@@ -62,15 +63,12 @@ Route::middleware(['api', 'cors'])->group(function () {
         Route::delete('/{note_alignment}', [AlignmentMasterController::class, 'destroy']);
         Route::post('/callback', [AlignmentMasterController::class, 'callback']);
       });
-
     });
-
-
   });
 });
 
 Route::middleware(['api'])->prefix('/gemba')->group(function () {
-  Route::middleware('auth:gemba')->group(function(){
+  Route::middleware('auth:api')->group(function(){
     Route::get('/rss_sample', [RssSampleController::class, 'index']);
     Route::post('/rss_sample', [RssSampleController::class, 'store']);    
   });

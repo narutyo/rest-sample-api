@@ -40,7 +40,8 @@ class LoginController extends AppBaseController
   }
 
   public function logout (Request $request) {
-    auth('sanctum')->user()->tokens()->delete();
+    // auth('sanctum')->user()->tokens()->delete();
+    $request->user()->token()->revoke();
     return response(['message' => 'You have been successfully logged out.'], 200);
   }
 }

@@ -41,14 +41,16 @@ return [
             'provider' => 'users',
         ],
         'api' => [
-            'driver' => 'sanctum',
+            'driver' => 'passport',
             'provider' => 'users',
         ],
-        'gemba' => [
-          'driver' => 'passport',
+        /*
+        'oauth' => [
+          'driver' => 'sanctum',
           'provider' => 'user_sanctum',
-      ],
-],
+        ],
+        */
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -75,7 +77,7 @@ return [
         'user_sanctum' => [
           'driver' => 'eloquent',
           'model' => App\Models\UserSanctum::class,
-      ],
+        ],
 
         // 'users' => [
         //     'driver' => 'database',
