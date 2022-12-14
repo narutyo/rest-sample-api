@@ -8,6 +8,8 @@ use App\Models\NoteAlignmentMaster;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
+use App\Models\RssSample;
+
 class AlignmentMasterController extends ApiBaseController
 {
     public function store(AlignmentMasterRequest $request){
@@ -85,6 +87,46 @@ class AlignmentMasterController extends ApiBaseController
 
         Log::info('Accept callback success');
         return true;
+      } catch (\Throwable $e) {
+        abort(500);
+      }
+    }
+
+    public function supply_info(Request $request)
+    {
+      Log::info('Start accept supplyInfo');
+      try {
+        logger('header', $request->header());
+
+        $ret = array();
+        $ret['completedAt'] = time();
+
+        Log::info('Accept supplyInfo success');
+        // return response()->json([])->withHeaders($ret);
+        echo http_build_query($ret);
+      } catch (\Throwable $e) {
+        abort(500);
+      }
+    }
+
+    public function recordset(Request $request)
+    {
+      Log::info('Start accept recordset response');
+      try {
+        logger('header', $request->header());
+
+        $ret = array();
+        $records = RssSample::all();
+        foreach($records as $record) {
+          $ret[] = array(
+            'title' => $record->title,
+            'attention' => $record->attention,
+            'importance'  => $record->importance,
+          );
+        }
+
+        Log::info('Response recordset success');
+        return $ret;
       } catch (\Throwable $e) {
         abort(500);
       }

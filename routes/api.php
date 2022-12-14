@@ -14,6 +14,7 @@ use App\Http\Controllers\API\Note\TemplateMasterController;
 use App\Http\Controllers\API\Note\AlignmentMasterController;
 
 use App\Http\Controllers\GEMBA\RssSampleController;
+use App\Http\Controllers\GEMBA\SampleBusinessReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,6 +58,8 @@ Route::middleware(['api', 'cors'])->group(function () {
 
       Route::prefix('/alignment')->group(function () {
         Route::get('', [AlignmentMasterController::class, 'index']);
+        Route::get('/supply_info', [AlignmentMasterController::class, 'supply_info']);
+        Route::get('/recordset', [AlignmentMasterController::class, 'recordset']);
         Route::get('/{note_alignment}', [AlignmentMasterController::class, 'show']);
         Route::post('', [AlignmentMasterController::class, 'store']);
         Route::put('/{note_alignment}', [AlignmentMasterController::class, 'update']);
@@ -70,6 +73,18 @@ Route::middleware(['api', 'cors'])->group(function () {
 Route::middleware(['api'])->prefix('/gemba')->group(function () {
   Route::middleware('auth:api')->group(function(){
     Route::get('/rss_sample', [RssSampleController::class, 'index']);
-    Route::post('/rss_sample', [RssSampleController::class, 'store']);    
+    Route::post('/rss_sample', [RssSampleController::class, 'store']);
+
+    Route::prefix('/sample_business_report')->group(function () {
+      Route::get('', [SampleBusinessReportController::class, 'index']);
+      Route::post('', [SampleBusinessReportController::class, 'store']);
+    });
   });
+
+  Route::prefix('/status')->group(function () {
+    Route::post('/{code}', function($code) {
+      return response()->json(['keys' => [], 'records' => [], 'message' => 'メッセージ返却テスト'], 200, ['Content-Type' => 'application/json']);
+    });
+  });
+
 });

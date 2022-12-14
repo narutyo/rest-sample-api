@@ -7,7 +7,6 @@ use App\Traits\AuthorObservable;
 use App\Traits\UuidTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
-use Carbon\Carbon;
 
 class BaseModel extends Model
 {
@@ -23,10 +22,6 @@ class BaseModel extends Model
   public const CREATED_BY = 'created_by';
   public const UPDATED_BY = 'updated_by';
   public const DELETED_AT = 'deleted_at';
-
-  public const DATE_FORMAT_ISO8601 = 'c';
-  public const DATE_FORMAT_DATETIME = 'Y-m-d H:i:s';
-  public const DATE_FORMAT = self::DATE_FORMAT_ISO8601;
 
   public static $rules = [
     self::ID => 'required|integer',
@@ -160,6 +155,9 @@ class BaseModel extends Model
 
   public function bulkStore($input)
   {
+logger('unique_key', $this->unique_key);
+
+
     $fillable = $this->getFillable();
     logger('fillable', $this->fillable);
     foreach($input as $data) {
@@ -167,24 +165,40 @@ class BaseModel extends Model
         return in_array($element, $fillable);
       }, ARRAY_FILTER_USE_KEY);
       $json = (!empty($data['json'])) ? json_decode($data['json'], true) : array();
-      $exists = $this->where('_documentId', $result['_documentId'])
-                    ->where('_pageId', $result['_pageId'])
-                    ->where('_objectId', $result['_objectId'])
-                    ->first();
       if (count($json)>0) {
         $result = array_merge($result, 
           array_filter($json, function($element) use ($fillable) {
             return in_array($element, $fillable);
           }, ARRAY_FILTER_USE_KEY)
         );
+
+        $exists = null;
+        if (count($this->unique_key)>0) {
+          $obj = $this;
+          foreach($this->unique_key as $ukey) {
+            $obj = $obj->where($ukey, $result[$ukey]);
+          }
+          $exists = $obj->first();
+        }
   
         if (is_object($exists)) {
           $exists->update($result);
         } else {
           $this->create($result)->fresh();
         }
-      } elseif (is_object($exists)) {
-        $exists->delete();
+      } elseif (count($this->unique_key)>0) {
+        $exists = null;
+        $obj = $this;
+        foreach($this->unique_key as $ukey) {
+          $obj = $obj->where($ukey, $result[$ukey]);
+        }
+        $exists = $obj->first();
+
+        $exists = $this->where('_documentId', $result['_documentId'])
+                      ->where('_pageId', $result['_pageId'])
+                      ->where('_objectId', $result['_objectId'])
+                      ->first();
+        if (is_object($exists)) $exists->delete();
       }
     }
     return;

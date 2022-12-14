@@ -7,6 +7,12 @@ class RssSample extends BaseModel
     public const TABLE_NAME = 'rss_samples';
     public $table = self::TABLE_NAME;
 
+    public $unique_key = [
+      self::_DOCUMENT_ID,
+      self::_OBJECT_ID,
+      self::_PAGE_ID,
+    ];
+
     public const TITLE = 'title';
     public const ATTENTION = 'attention';
     public const IMPORTANCE = 'importance';

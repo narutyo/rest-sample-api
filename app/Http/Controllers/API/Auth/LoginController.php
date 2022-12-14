@@ -34,6 +34,7 @@ class LoginController extends AppBaseController
     $ret = array(
       'uuid'  => $user->uuid,
       'name'  => $user->name,
+      'email'  => $user->email,
     );
 
     return response(['user' => $ret], 200);

@@ -23,10 +23,6 @@ class BasePivot extends Pivot
   public const UPDATED_BY = 'updated_by';
   public const DELETED_AT = 'deleted_at';
 
-  public const DATE_FORMAT_ISO8601 = 'c';
-  public const DATE_FORMAT_DATETIME = 'Y-m-d H:i:s';
-  public const DATE_FORMAT = self::DATE_FORMAT_ISO8601;
-
   public static $rules = [
     self::ID => 'required|integer',
     self::UUID => 'required|string|max:36',
