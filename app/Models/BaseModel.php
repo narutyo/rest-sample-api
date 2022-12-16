@@ -155,11 +155,7 @@ class BaseModel extends Model
 
   public function bulkStore($input)
   {
-logger('unique_key', $this->unique_key);
-
-
     $fillable = $this->getFillable();
-    logger('fillable', $this->fillable);
     foreach($input as $data) {
       $result = array_filter($data, function($element) use ($fillable) {
         return in_array($element, $fillable);

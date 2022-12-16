@@ -5,8 +5,10 @@ namespace App\Http\Controllers\API\Note;
 use App\Http\Controllers\API\ApiBaseController;
 use App\Http\Requests\API\Note\AlignmentMasterRequest;
 use App\Models\NoteAlignmentMaster;
+use App\Models\NoteTemplateMaster;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+
 
 use App\Models\RssSample;
 
@@ -75,8 +77,6 @@ class AlignmentMasterController extends ApiBaseController
     {
       Log::info('Start accept callback');
       try {
-        logger('header', $request->header());
-
         $tmpParam = $request->all();
         $param =  (!is_array($tmpParam)) ? $tmpParam : $tmpParam[0];
         $note_alignment = NoteAlignmentMaster::where('uuid', $param['internal_id'])->first();
@@ -96,8 +96,6 @@ class AlignmentMasterController extends ApiBaseController
     {
       Log::info('Start accept supplyInfo');
       try {
-        logger('header', $request->header());
-
         $ret = array();
         $ret['completedAt'] = time();
 
@@ -113,8 +111,6 @@ class AlignmentMasterController extends ApiBaseController
     {
       Log::info('Start accept recordset response');
       try {
-        logger('header', $request->header());
-
         $ret = array();
         $records = RssSample::all();
         foreach($records as $record) {
@@ -150,5 +146,19 @@ class AlignmentMasterController extends ApiBaseController
     protected function getTypeDestroy()
     {
       return $this->apiSpecBaseUrl . '/delete_noteAlignmentMaster';
+    }
+
+    protected function search($criteria, $fields)
+    {
+      $with = [
+        NoteAlignmentMaster::NOTE_TEMPLATE_MASTER  => function($query) {
+          $query->with([
+            NoteTemplateMaster::NOTE_TEMPLATE_TAG_PARAMS
+          ]);
+        }
+      ];
+      $with = $this->mapSearchableFieldsToRelation($with, null);
+      return $this->model->search($criteria)
+                  ->with($with);
     }
 }

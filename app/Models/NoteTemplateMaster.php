@@ -36,7 +36,8 @@ class NoteTemplateMaster extends BaseModel
     ];
 
     public function note_template_tag_params() {
-      return $this->hasMany(NoteTemplateTagParam::class, NoteTemplateTagParam::NOTE_TEMPLATE_MASTER_ID)->orderBy('serial_number', 'ASC');
+      return $this->hasMany(NoteTemplateTagParam::class, NoteTemplateTagParam::NOTE_TEMPLATE_MASTER_ID)
+                  ->orderBy('serial_number', 'ASC');
     }
 
     public static function add($input)

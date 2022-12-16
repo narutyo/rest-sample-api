@@ -11,8 +11,6 @@ class RssSampleController extends Controller
 {
   public function index(Request $request)
   {
-    logger('header', $request->header());
-
     $url = $request->input('url');
     $ret = array();
     if ($url) {
@@ -33,8 +31,6 @@ class RssSampleController extends Controller
 
   public function store(Request $request)
   {
-    logger('header', $request->header());
-
     $obj = new RssSample;
     $obj->bulkStore($request->all());
     return;
