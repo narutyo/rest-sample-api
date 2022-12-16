@@ -74,11 +74,6 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
-        'user_sanctum' => [
-          'driver' => 'eloquent',
-          'model' => App\Models\UserSanctum::class,
-        ],
-
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',

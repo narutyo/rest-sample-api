@@ -13,15 +13,18 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('note_template_masters', function (Blueprint $table) {
+        Schema::create('note_template_tag_params', function (Blueprint $table) {
           $table->id();
           $table->uuid('uuid')->unique();
+          $table->integer('note_template_master_id')->unsigned();
 
+          $table->string('sequence');
           $table->string('name');
-          $table->longtext('template_id');
-          $table->longtext('folder_uri');
-          $table->longtext('recordset_model')->nullable();
-          $table->longtext('recordset_tagname_space')->nullable();
+          $table->boolean('create')->default(false);
+          $table->boolean('open')->default(false);
+          $table->string('type');
+          $table->integer('serial_number')->default(0);
+          $table->string('value')->nullable();
           
           $table->timestamps();
           $table->integer('created_by')->default(0);
@@ -37,6 +40,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('note_template_masters');
+        Schema::dropIfExists('note_template_tag_params');
     }
 };

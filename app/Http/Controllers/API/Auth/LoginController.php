@@ -6,7 +6,6 @@ use App\Http\Controllers\API\AppBaseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
-use App\Models\Sanctum\PersonalAccessToken;
 use App\Models\User;
 
 class LoginController extends AppBaseController
@@ -41,7 +40,6 @@ class LoginController extends AppBaseController
   }
 
   public function logout (Request $request) {
-    // auth('sanctum')->user()->tokens()->delete();
     $request->user()->token()->revoke();
     return response(['message' => 'You have been successfully logged out.'], 200);
   }
