@@ -17,6 +17,7 @@ class NoteTemplateMaster extends BaseModel
     public const TEMPLATE_ID = 'template_id';
     public const FOLDER_URI = 'folder_uri';
     public const RECORDSET_MODEL = 'recordset_model';
+    public const RECORDSET_PAGE_TEMPLATE_ID = 'recordset_page_template_id';
     public const RECORDSET_TAGNAME_SPACE = 'recordset_tagname_space';
 
     public $fillable = [
@@ -24,6 +25,7 @@ class NoteTemplateMaster extends BaseModel
       self::TEMPLATE_ID,
       self::FOLDER_URI,
       self::RECORDSET_MODEL,
+      self::RECORDSET_PAGE_TEMPLATE_ID,
       self::RECORDSET_TAGNAME_SPACE,
     ];
 
@@ -32,6 +34,7 @@ class NoteTemplateMaster extends BaseModel
       self::TEMPLATE_ID => 'string',
       self::FOLDER_URI => 'string',
       self::RECORDSET_MODEL => 'string',
+      self::RECORDSET_PAGE_TEMPLATE_ID => 'string',
       self::RECORDSET_TAGNAME_SPACE => 'string',
     ];
 

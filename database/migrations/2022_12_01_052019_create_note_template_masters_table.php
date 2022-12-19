@@ -21,6 +21,7 @@ return new class extends Migration
           $table->longtext('template_id');
           $table->longtext('folder_uri');
           $table->longtext('recordset_model')->nullable();
+          $table->longtext('recordset_page_template_id')->nullable();
           $table->longtext('recordset_tagname_space')->nullable();
           
           $table->timestamps();

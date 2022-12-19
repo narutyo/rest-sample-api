@@ -4,7 +4,6 @@ namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 
 abstract class ApiBaseController extends AppBaseController
 {
@@ -105,9 +104,6 @@ abstract class ApiBaseController extends AppBaseController
     protected function mapSearchableFieldsToRelation($with, $fields)
     {
         if (!empty($fields)) {
-            $fields = array_map(function ($item) {
-                return Str::camel($item);
-            }, $fields);
             $with = array_filter($with, function ($val, $key) use ($fields) {
                 return in_array($key, $fields) || in_array($val, $fields);
             }, ARRAY_FILTER_USE_BOTH);

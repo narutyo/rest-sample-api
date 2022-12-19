@@ -29,6 +29,7 @@ class TemplateMasterRequest extends BaseRequest
           NoteTemplateMaster::TEMPLATE_ID => 'required',
           NoteTemplateMaster::FOLDER_URI => 'required',
           NoteTemplateMaster::RECORDSET_MODEL => 'sometimes',
+          NoteTemplateMaster::RECORDSET_PAGE_TEMPLATE_ID => 'sometimes',
           NoteTemplateMaster::RECORDSET_TAGNAME_SPACE => 'sometimes',
           'createParams'  => 'sometimes|array', // リレーション
           'supplyParams'  => 'sometimes|array', // リレーション

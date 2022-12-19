@@ -157,7 +157,7 @@ class AlignmentMasterController extends ApiBaseController
           ]);
         }
       ];
-      $with = $this->mapSearchableFieldsToRelation($with, null);
+      $with = $this->mapSearchableFieldsToRelation($with, $fields);
       return $this->model->search($criteria)
                   ->with($with);
     }
