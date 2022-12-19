@@ -92,27 +92,53 @@ class AlignmentMasterController extends ApiBaseController
       }
     }
 
-    public function supply_info(Request $request)
+    public function supply_info(NoteAlignmentMaster $note_alignment, Request $request)
     {
       Log::info('Start accept supplyInfo');
       try {
+        $master = $note_alignment->note_template_master()->first();
+        if (!is_object($master)) return;
+
+        $user = $request->user();
+        $params = $master->note_template_tag_params()
+                          ->where('sequence', 'supply')
+                          ->where($request->sequence, true)
+                          ->get();
         $ret = array();
-        $ret['completedAt'] = time();
+        foreach($params as $param) {
+          if ($param->type == 'manual') {
+            $ret[$param->name] = $param->value;
+          } else {
+            switch($param->value) {
+              case 'loginUser':
+                $ret[$param->name] = $user->name;
+                break;
+              case 'loginMail':
+                $ret[$param->name] = $user->email;
+                break;
+              case 'timestamp':
+                $ret[$param->name] = time();
+                break;
+            }
+          }
+        }
 
         Log::info('Accept supplyInfo success');
-        // return response()->json([])->withHeaders($ret);
-        echo http_build_query($ret);
       } catch (\Throwable $e) {
         abort(500);
       }
     }
 
-    public function recordset(Request $request)
+    public function recordset(NoteAlignmentMaster $note_alignment, Request $request)
     {
       Log::info('Start accept recordset response');
       try {
+        $master = $note_alignment->note_template_master()->first();
+        if (!is_object($master)) return;
+
+        $class = 'App\\Models\\'.$master->recordset_model;
+        $records =  $class::all();
         $ret = array();
-        $records = RssSample::all();
         foreach($records as $record) {
           $ret[] = array(
             'title' => $record->title,

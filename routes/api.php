@@ -58,8 +58,8 @@ Route::middleware(['api', 'cors'])->group(function () {
 
       Route::prefix('/alignment')->group(function () {
         Route::get('', [AlignmentMasterController::class, 'index']);
-        Route::get('/supply_info', [AlignmentMasterController::class, 'supply_info']);
-        Route::get('/recordset', [AlignmentMasterController::class, 'recordset']);
+        Route::get('/supply_info/{note_alignment}', [AlignmentMasterController::class, 'supply_info']);
+        Route::get('/recordset/{note_alignment}', [AlignmentMasterController::class, 'recordset']);
         Route::get('/{note_alignment}', [AlignmentMasterController::class, 'show']);
         Route::post('', [AlignmentMasterController::class, 'store']);
         Route::put('/{note_alignment}', [AlignmentMasterController::class, 'update']);
