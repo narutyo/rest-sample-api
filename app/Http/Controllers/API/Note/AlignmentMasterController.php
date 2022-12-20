@@ -124,6 +124,7 @@ class AlignmentMasterController extends ApiBaseController
         }
 
         Log::info('Accept supplyInfo success');
+        echo http_build_query($ret);
       } catch (\Throwable $e) {
         abort(500);
       }
