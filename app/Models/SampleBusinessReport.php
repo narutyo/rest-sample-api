@@ -77,4 +77,9 @@ class SampleBusinessReport extends BaseModel
     {
       $this->attributes['nextDateTime'] = (!$value) ? null : new Carbon($value);
     }
-}
+
+    public function setRankAttribute($value)
+    {
+      $this->attributes['rank'] = (!$value) ? 0 : $value;
+    }
+  }
