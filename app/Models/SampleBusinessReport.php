@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Webpatser\Uuid\Uuid;
+use App\Models\User;
 
 class SampleBusinessReport extends BaseModel
 {
@@ -81,5 +83,57 @@ class SampleBusinessReport extends BaseModel
     public function setRankAttribute($value)
     {
       $this->attributes['rank'] = (!$value) ? 0 : $value;
+    }
+
+    public static function generate($input)
+    {
+      $initialCount = static::where(self::REPORT_ID, 'like', 'Gen-%')->count();
+      $users = User::whereIn('uuid', $input['users'])->get()->pluck('name')->toArray();
+      $status = [
+        '初回',
+        '商談中',
+        '成約見込み',
+        '商談成立',
+        '来期見送り',
+        'ロスト',
+      ];
+
+      $days = 0;
+      switch ($input['range']) {
+        case 'week':
+          $days = 7;
+          break;
+        case 'month':
+          $days = 30;
+          break;
+        case 'quarter':
+          $days = 90;
+          break;
+        case 'year':
+          $days = 365;
+          break;
+      }
+
+      $generates = [];
+      for ($i = 0; $i < $input['count']; $i++) {
+        $tmp = [];
+        $period = rand(1, $days);
+        $tmp[self::UUID] = Uuid::generate()->string;
+        $tmp[self::REPORT_ID] = 'Gen-' . ($initialCount + $i + 1);
+        $tmp[self::NAME] = $users[array_rand($users, 1)];
+        $tmp[self::CUSTOMER] = '訪問先' . ($initialCount + $i + 1);
+        $tmp[self::VISIT_DATE_TIME] = date('Y-m-d H:00:00', (time() - $period*24*60*60) + rand(9, 18)*60*60);
+        $tmp[self::NEXT_DATE_TIME] = date('Y-m-d H:00:00', (time() - ($period - 1)*24*60*60) + rand(9, 18)*60*60);
+        $tmp[self::STATUS] = array_rand($status, 1);
+        $tmp[self::RANK] = rand(1, 5);
+        $tmp[self::CREATED_AT] = date('Y-m-d H:i:s');
+        $tmp[self::UPDATED_AT] = date('Y-m-d H:i:s');
+        $tmp[self::CREATED_BY] = \Auth::user()->id;
+        $tmp[self::UPDATED_BY] = \Auth::user()->id;
+        $generates[] = $tmp;
+      }
+      $model = new static();
+      $model->insert($generates);
+      return static::all();
     }
   }

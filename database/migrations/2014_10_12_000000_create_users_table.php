@@ -22,6 +22,9 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
+            $table->integer('created_by')->default(0);
+            $table->integer('updated_by')->default(0);
+            $table->softDeletes();
         });
     }
 

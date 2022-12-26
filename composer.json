@@ -13,6 +13,7 @@
         "laravel/telescope": "^4.9",
         "laravel/tinker": "^2.7",
         "laravel/ui": "^4.1",
+        "pusher/pusher-php-server": "^7.2",
         "spatie/laravel-db-snapshots": "^2.5",
         "vedmant/laravel-feed-reader": "^1.5",
         "webpatser/laravel-uuid": "^4.0"

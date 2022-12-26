@@ -2,16 +2,18 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Auth\Authenticatable;
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 use App\Traits\UuidTrait;
 
-class User extends Authenticatable
+class User extends BaseModel implements AuthenticatableContract, CanResetPasswordContract
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use Authenticatable, CanResetPassword;
+    use HasApiTokens, Notifiable;
     use UuidTrait;
 
     /**
@@ -19,7 +21,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = [
+    public $fillable = [
         'name',
         'email',
         'password',

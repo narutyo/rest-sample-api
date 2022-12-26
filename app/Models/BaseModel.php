@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Events\Notification;
 use App\Traits\AuthorObservable;
 use App\Traits\UuidTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -197,6 +198,7 @@ class BaseModel extends Model
         if (is_object($exists)) $exists->delete();
       }
     }
+    event(new Notification());
     return;
   }
 }

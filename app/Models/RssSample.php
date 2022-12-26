@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Models;
-
 class RssSample extends BaseModel
 {
     public const TABLE_NAME = 'rss_samples';

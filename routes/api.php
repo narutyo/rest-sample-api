@@ -9,7 +9,9 @@ use App\Http\Controllers\API\Auth\ChangePasswordController;
 use App\Http\Controllers\API\Auth\ForgotPasswordController;
 use App\Http\Controllers\API\Auth\ResetPasswordController;
 
+use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\Sample\RssController;
+use App\Http\Controllers\API\Sample\BusinessReportController;
 use App\Http\Controllers\API\Note\TemplateMasterController;
 use App\Http\Controllers\API\Note\AlignmentMasterController;
 
@@ -41,9 +43,19 @@ Route::middleware(['api', 'cors'])->group(function () {
       Route::post("/logout", [LoginController::class,'logout']);
     });
 
+    Route::prefix('/users')->group(function () {
+      Route::get('', [UserController::class, 'index']);
+    });
+
     Route::prefix('/sample')->group(function () {
       Route::prefix('/rss')->group(function () {
         Route::get('', [RssController::class, 'index']);
+      });
+      Route::prefix('/business_report')->group(function () {
+        Route::get('', [BusinessReportController::class, 'index']);
+        Route::get('/suggest', [BusinessReportController::class, 'suggest']);
+        Route::post('/generate', [BusinessReportController::class, 'generate']);
+        Route::delete('/truncate', [BusinessReportController::class, 'truncate']);
       });
     });
 
