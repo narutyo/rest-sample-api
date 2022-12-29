@@ -10,7 +10,12 @@ class SampleBusinessReportController extends Controller
 {
   public function index(Request $request)
   {
-    $reports = SampleBusinessReport::orderBy('reportId')->get();
+    $page = $request->get('targetPage', 1);
+    $query = $this->search($request);
+    $reports = $query->orderBy('reportId')
+                     ->limit(25)
+                     ->offset(($page - 1) * 25)
+                     ->get();
     $ret = array();
     foreach($reports as $report) {
       $ret[] = array(
@@ -36,6 +41,73 @@ class SampleBusinessReportController extends Controller
       'records' => $ret,
     );
   }
+
+  public function record_count(Request $request)
+  {
+    $query = $this->search($request);
+    return array(
+      'keys'  => [
+        'count',
+      ],
+      'records' => [
+        [ 'count' => $query->count() ]
+      ],
+    );
+  }
+
+  public function search($request)
+  {
+    $query = new SampleBusinessReport;
+    if ($request->get('name')) $query = $query->where(SampleBusinessReport::NAME, $request->get('name'));
+    if ($request->get('visitDateMin')) $query = $query->where(SampleBusinessReport::VISIT_DATE_TIME, '>=', $request->get('visitDateMin'));
+    if ($request->get('visitDateMax')) $query = $query->where(SampleBusinessReport::VISIT_DATE_TIME, '<=', $request->get('visitDateMax'));
+    return $query;
+  }
+
+  public function names(Request $request)
+  {
+    $data = SampleBusinessReport::select(SampleBusinessReport::NAME)
+                 ->groupBy(SampleBusinessReport::NAME)
+                 ->orderBy(SampleBusinessReport::NAME, 'asc')
+                 ->get();
+    $ret = [];
+    foreach($data as $v) {
+      $ret[][SampleBusinessReport::NAME] = $v->{SampleBusinessReport::NAME};
+    }
+    return array(
+      'keys'  => [
+        SampleBusinessReport::NAME,
+      ],
+      'records' => $ret,
+    );
+  }
+
+  public function find($report)
+  {
+    $obj = SampleBusinessReport::where('reportId', $report)->first();
+    return array(
+      'keys' => [
+        SampleBusinessReport::REPORT_ID,
+        SampleBusinessReport::NAME,
+        SampleBusinessReport::CUSTOMER,
+        SampleBusinessReport::VISIT_DATE_TIME,
+        SampleBusinessReport::NEXT_DATE_TIME,
+        SampleBusinessReport::STATUS,
+        SampleBusinessReport::RANK,
+      ],
+      'records' => [
+        [
+          SampleBusinessReport::REPORT_ID => $report,
+          SampleBusinessReport::NAME => optional($obj)->{SampleBusinessReport::NAME},
+          SampleBusinessReport::CUSTOMER => optional($obj)->{SampleBusinessReport::CUSTOMER},
+          SampleBusinessReport::VISIT_DATE_TIME => optional($obj)->{SampleBusinessReport::VISIT_DATE_TIME},
+          SampleBusinessReport::NEXT_DATE_TIME => optional($obj)->{SampleBusinessReport::NEXT_DATE_TIME},
+          SampleBusinessReport::STATUS => optional($obj)->{SampleBusinessReport::STATUS},
+          SampleBusinessReport::RANK => optional($obj)->{SampleBusinessReport::RANK},
+        ]
+      ],
+    );
+}
 
   public function store(Request $request)
   {

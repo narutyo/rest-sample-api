@@ -138,15 +138,7 @@ class AlignmentMasterController extends ApiBaseController
         if (!is_object($master)) return;
 
         $class = 'App\\Models\\'.$master->recordset_model;
-        $records =  $class::all();
-        $ret = array();
-        foreach($records as $record) {
-          $ret[] = array(
-            'title' => $record->title,
-            'attention' => $record->attention,
-            'importance'  => $record->importance,
-          );
-        }
+        $ret =  $class::recordset();
 
         Log::info('Response recordset success');
         return $ret;

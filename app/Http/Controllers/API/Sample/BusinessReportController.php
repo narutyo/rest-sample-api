@@ -4,19 +4,47 @@ namespace App\Http\Controllers\API\Sample;
 
 use App\Http\Controllers\API\ApiBaseController;
 use App\Http\Requests\API\Sample\BusinessReportRequest;
+use App\Http\Requests\API\Sample\BusinessReportAggregateRequest;
 use Illuminate\Http\Request;
+use App\Events\Notification;
 use App\Models\SampleBusinessReport;
 use Illuminate\Support\Facades\Log;
 
 class BusinessReportController extends ApiBaseController
 {
+    public function aggregate(BusinessReportAggregateRequest $request)
+    {
+      Log::info('Start aggregate BusinessReportData');
+      try{
+        $validated = $request->validated();
+        list($y, $m) = explode('-', $validated['period']);
+        if (!$y || !$m) {
+          $y = date('Y');
+          $m = date('n');
+        }
+        $reports = SampleBusinessReport::aggregate($y, $m);
+        Log::info('Aggregate BusinessReportData success');
+
+        return $this->success(
+          'aggregate_businessReportData',
+          'BusinessReportData aggregate successfully',
+          $this->apiSpecBaseUrl . '/aggregate_businessReportData',
+          $request,
+          count($reports),
+          $reports
+        );
+      } catch (\Throwable $e) {
+        return $this->sendError($e->getMessage(), 500);
+      }
+    }
+
     public function suggest(Request $request)
     {
       $fields = $request->has('fields') ? $request->get('fields') : [];
-      $query = $this->search($request->all(), $fields);
-      $data = $query->select($fields)
-                    ->groupBy('name')
-                    ->get();
+      $data = $this->search($request->all(), $fields)
+                   ->select($fields)
+                   ->groupBy('name')
+                   ->get();
       Log::info('Get industry company success');
       return $this->success(
           'company_master',
@@ -54,6 +82,7 @@ class BusinessReportController extends ApiBaseController
       try{
         $businessReport = SampleBusinessReport::truncate();
         Log::info('Truncate SampleBusinessReport success');
+        event(new Notification());
 
         return $this->success(
           'truncat_sampleBusinessReport',

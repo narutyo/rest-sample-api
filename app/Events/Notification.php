@@ -13,19 +13,19 @@ class Notification implements ShouldBroadcast
 {
     use InteractsWithSockets, SerializesModels;
 
-    protected $userChannels;
-
     public function __construct()
     {
     }
 
     public function broadcastOn()
     {
+      logger("a");
       return new PrivateChannel('reload');
     }
-
+/*
     public function broadcastAs()
     {
       return 'notification-reload';
     }
+*/
 }

@@ -85,6 +85,31 @@ class SampleBusinessReport extends BaseModel
       $this->attributes['rank'] = (!$value) ? 0 : $value;
     }
 
+    public static function aggregate($y, $m)
+    {
+      $start = strtotime(date('Y-m-d', mktime(0, 0, 0, $m, 1, $y)));
+      $end = strtotime(date('Y-m-t', $start) . ' 23:59:59');
+      $records = static::where('visitDateTime', '>=', date('Y-m-d H:i:s', $start))
+                      ->where('visitDateTime', '<=', date('Y-m-d H:i:s', $end))
+                      ->select('name')
+                      ->selectRaw('DATE_FORMAT(visitDateTime, "%e") AS date')
+                      ->selectRaw('COUNT(id) AS count')
+                      ->groupBy('name')
+                      ->groupBy('date')
+                      ->orderBy('name')
+                      ->get();
+      $tmp = $ret = array();
+      foreach($records as $record) {
+        $tmp[$record->name][$record->date] = $record->count;
+      }
+      foreach($tmp as $name => $vals) {
+        for($i=1; $i<=date('d', $end); $i++) {
+          $ret[$name][$i] = (empty($tmp[$name][$i])) ? null : $tmp[$name][$i];
+        }  
+      }
+      return $ret;
+    }
+
     public static function generate($input)
     {
       $initialCount = static::where(self::REPORT_ID, 'like', 'Gen-%')->count();
@@ -119,12 +144,12 @@ class SampleBusinessReport extends BaseModel
         $tmp = [];
         $period = rand(1, $days);
         $tmp[self::UUID] = Uuid::generate()->string;
-        $tmp[self::REPORT_ID] = 'Gen-' . ($initialCount + $i + 1);
+        $tmp[self::REPORT_ID] = 'Gen-' . str_pad(($initialCount + $i + 1), 6, 0, STR_PAD_LEFT);
         $tmp[self::NAME] = $users[array_rand($users, 1)];
         $tmp[self::CUSTOMER] = '訪問先' . ($initialCount + $i + 1);
         $tmp[self::VISIT_DATE_TIME] = date('Y-m-d H:00:00', (time() - $period*24*60*60) + rand(9, 18)*60*60);
         $tmp[self::NEXT_DATE_TIME] = date('Y-m-d H:00:00', (time() - ($period - 1)*24*60*60) + rand(9, 18)*60*60);
-        $tmp[self::STATUS] = array_rand($status, 1);
+        $tmp[self::STATUS] = $status[array_rand($status, 1)];
         $tmp[self::RANK] = rand(1, 5);
         $tmp[self::CREATED_AT] = date('Y-m-d H:i:s');
         $tmp[self::UPDATED_AT] = date('Y-m-d H:i:s');
@@ -136,4 +161,14 @@ class SampleBusinessReport extends BaseModel
       $model->insert($generates);
       return static::all();
     }
-  }
+
+    public static function recordset()
+    {
+      $records = static::all();
+      $ret = [];
+      foreach($records as $record) {
+        $ret[] = $record->toArray();
+      }
+      return $ret;
+    }
+}

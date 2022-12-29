@@ -53,6 +53,7 @@ Route::middleware(['api', 'cors'])->group(function () {
       });
       Route::prefix('/business_report')->group(function () {
         Route::get('', [BusinessReportController::class, 'index']);
+        Route::get('/aggregate', [BusinessReportController::class, 'aggregate']);
         Route::get('/suggest', [BusinessReportController::class, 'suggest']);
         Route::post('/generate', [BusinessReportController::class, 'generate']);
         Route::delete('/truncate', [BusinessReportController::class, 'truncate']);
@@ -89,6 +90,10 @@ Route::middleware(['api'])->prefix('/gemba')->group(function () {
 
     Route::prefix('/sample_business_report')->group(function () {
       Route::get('', [SampleBusinessReportController::class, 'index']);
+      Route::get('/count', [SampleBusinessReportController::class, 'record_count']);
+      Route::get('/names', [SampleBusinessReportController::class, 'names']);
+      Route::get('/aggregate', [SampleBusinessReportController::class, 'aggregate']);
+      Route::get('/{report}', [SampleBusinessReportController::class, 'find']);
       Route::post('', [SampleBusinessReportController::class, 'store']);
     });
   });

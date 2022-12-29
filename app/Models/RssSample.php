@@ -45,4 +45,14 @@ class RssSample extends BaseModel
       self::_OBJECT_ID => 'string',
       self::_PAGE_ID => 'string',
     ];
+
+    public static function recordset()
+    {
+      $records = static::all();
+      $ret = [];
+      foreach($records as $record) {
+        $ret[] = $record->toArray();
+      }
+      return $ret;
+    }
 }
