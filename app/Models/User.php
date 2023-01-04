@@ -45,4 +45,9 @@ class User extends BaseModel implements AuthenticatableContract, CanResetPasswor
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function findForPassport($username)
+    {
+        return $this->where('identification_code', $username)->first();
+    }
 }

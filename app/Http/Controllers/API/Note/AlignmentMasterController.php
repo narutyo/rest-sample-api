@@ -4,11 +4,11 @@ namespace App\Http\Controllers\API\Note;
 
 use App\Http\Controllers\API\ApiBaseController;
 use App\Http\Requests\API\Note\AlignmentMasterRequest;
-use App\Models\NoteAlignmentMaster;
-use App\Models\NoteTemplateMaster;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-
+use App\Events\Notification;
+use App\Models\NoteAlignmentMaster;
+use App\Models\NoteTemplateMaster;
 
 use App\Models\RssSample;
 
@@ -84,6 +84,8 @@ class AlignmentMasterController extends ApiBaseController
         
         $note_alignment->note_uri = $param['noteid'];
         $note_alignment->save();
+
+        event(new Notification('NoteAlignmentMaster'));
 
         Log::info('Accept callback success');
         return true;

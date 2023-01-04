@@ -30,7 +30,6 @@ use App\Http\Controllers\GEMBA\SampleBusinessReportController;
 */
 
 Route::middleware(['api', 'cors'])->group(function () {
-  // Route::post('/session/login', [LoginController::class, 'login']);
   Route::post('/session/login', [AccessTokenController::class, 'issueToken']);
   Route::post('/password/forget', [ForgotPasswordController::class, 'sendResetLinkEmail']);
   Route::post('/password/reset', [ResetPasswordController::class, 'reset']);

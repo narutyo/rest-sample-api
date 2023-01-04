@@ -21,6 +21,7 @@ class InitializeSeeder extends Seeder
         $user->fill([
           'name'      => 'external',
           'email'     => 'external@local',
+          'identification_code'  => '2222',
           'password'  => Hash::make('123456'),
         ]);
         $user->save();
@@ -28,6 +29,7 @@ class InitializeSeeder extends Seeder
         $user->fill([
           'name'      => 'admin',
           'email'     => 'admin@local',
+          'identification_code'  => '1111',
           'password'  => Hash::make('123456'),
         ]);
         $user->save();

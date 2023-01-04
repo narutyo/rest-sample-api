@@ -6,9 +6,9 @@ use App\Http\Controllers\API\ApiBaseController;
 use App\Http\Requests\API\Sample\BusinessReportRequest;
 use App\Http\Requests\API\Sample\BusinessReportAggregateRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Events\Notification;
 use App\Models\SampleBusinessReport;
-use Illuminate\Support\Facades\Log;
 
 class BusinessReportController extends ApiBaseController
 {
@@ -62,6 +62,8 @@ class BusinessReportController extends ApiBaseController
       try{
         $reports = SampleBusinessReport::generate($request->validated());
         Log::info('Generate BusinessReportData success');
+        
+        event(new Notification('SampleBusinessReport'));
 
         return $this->success(
           'generate_businessReportData',
@@ -82,7 +84,8 @@ class BusinessReportController extends ApiBaseController
       try{
         $businessReport = SampleBusinessReport::truncate();
         Log::info('Truncate SampleBusinessReport success');
-        event(new Notification());
+
+        event(new Notification('SampleBusinessReport'));
 
         return $this->success(
           'truncat_sampleBusinessReport',

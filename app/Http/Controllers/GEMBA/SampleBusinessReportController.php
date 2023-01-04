@@ -5,6 +5,7 @@ namespace App\Http\Controllers\GEMBA;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\SampleBusinessReport;
+use Carbon\Carbon;
 
 class SampleBusinessReportController extends Controller
 {
@@ -107,12 +108,44 @@ class SampleBusinessReportController extends Controller
         ]
       ],
     );
-}
+  }
 
   public function store(Request $request)
   {
     $obj = new SampleBusinessReport;
     $obj->bulkStore($request->all());
     return;
+  }
+
+  public function aggregate(Request $request)
+  {
+    $stamp = Carbon::parse(str_replace(' ', '+', $request->input('month')));
+    $y = $stamp->format('Y');
+    $m = $stamp->format('m');
+    $reports = SampleBusinessReport::aggregate($y, $m);
+
+    $keys = $records = $tmp = array();
+    $keys[] = 'name';
+    for($i=1; $i<=31; $i++) {
+      $keys[] = 'day' . str_pad($i, 2, 0, STR_PAD_LEFT);
+    }
+    $keys[] = 'sum';
+
+    foreach($reports as $name => $vals) {
+      $tmp = array();
+      $sum = 0;
+      $tmp['name'] = $name;
+      for($i=1; $i<=31; $i++) {
+        $tmp['day' . str_pad($i, 2, 0, STR_PAD_LEFT)] = (isset($vals[$i])) ? $vals[$i] : null;
+        if (isset($vals[$i]) && $vals[$i] > 0) $sum += $vals[$i];
+      }
+      $tmp['sum'] = $sum;
+      $records[] = $tmp;
+    }
+
+    return array(
+      'keys' => $keys,
+      'records' => $records,
+    );
   }
 }

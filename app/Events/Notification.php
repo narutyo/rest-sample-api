@@ -8,24 +8,33 @@ use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Queue\SerializesModels;
+use App\Models\User;
 
 class Notification implements ShouldBroadcast
 {
     use InteractsWithSockets, SerializesModels;
 
-    public function __construct()
+    protected $userChannels;
+    protected $targetModel;
+
+    public function __construct($targetModel)
     {
+      $this->targetModel = $targetModel;
+      $users = User::all();
+      foreach($users as $user) {
+        $this->userChannels[] = 'private-App.Models.User.' . $user->uuid;
+      }
     }
 
     public function broadcastOn()
     {
-      logger("a");
-      return new PrivateChannel('reload');
+      return $this->userChannels;
     }
-/*
-    public function broadcastAs()
+
+    public function broadcastWith()
     {
-      return 'notification-reload';
+        return [
+            'target' => $this->targetModel,
+        ];
     }
-*/
 }

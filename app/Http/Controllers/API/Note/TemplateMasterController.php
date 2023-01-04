@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\API\Note;
 
 use App\Http\Controllers\API\ApiBaseController;
-use App\Http\Requests\API\Note\TemplateMasterRequest;
-use App\Models\NoteTemplateMaster;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use App\Http\Requests\API\Note\TemplateMasterRequest;
+use App\Models\NoteTemplateMaster;
 
 class TemplateMasterController extends ApiBaseController
 {
