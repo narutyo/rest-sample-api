@@ -10,8 +10,6 @@ use App\Events\Notification;
 use App\Models\NoteAlignmentMaster;
 use App\Models\NoteTemplateMaster;
 
-use App\Models\RssSample;
-
 class AlignmentMasterController extends ApiBaseController
 {
     public function store(AlignmentMasterRequest $request){

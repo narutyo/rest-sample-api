@@ -10,12 +10,10 @@ use App\Http\Controllers\API\Auth\ForgotPasswordController;
 use App\Http\Controllers\API\Auth\ResetPasswordController;
 
 use App\Http\Controllers\API\UserController;
-use App\Http\Controllers\API\Sample\RssController;
 use App\Http\Controllers\API\Sample\BusinessReportController;
 use App\Http\Controllers\API\Note\TemplateMasterController;
 use App\Http\Controllers\API\Note\AlignmentMasterController;
 
-use App\Http\Controllers\GEMBA\RssSampleController;
 use App\Http\Controllers\GEMBA\SampleBusinessReportController;
 
 /*
@@ -50,9 +48,6 @@ Route::middleware(['api', 'cors'])->group(function () {
     });
 
     Route::prefix('/sample')->group(function () {
-      Route::prefix('/rss')->group(function () {
-        Route::get('', [RssController::class, 'index']);
-      });
       Route::prefix('/business_report')->group(function () {
         Route::get('', [BusinessReportController::class, 'index']);
         Route::get('/aggregate', [BusinessReportController::class, 'aggregate']);
@@ -87,9 +82,6 @@ Route::middleware(['api', 'cors'])->group(function () {
 
 Route::middleware(['api'])->prefix('/gemba')->group(function () {
   Route::middleware('auth:api')->group(function(){
-    Route::get('/rss_sample', [RssSampleController::class, 'index']);
-    Route::post('/rss_sample', [RssSampleController::class, 'store']);
-
     Route::prefix('/sample_business_report')->group(function () {
       Route::get('', [SampleBusinessReportController::class, 'index']);
       Route::get('/count', [SampleBusinessReportController::class, 'record_count']);
