@@ -3,8 +3,6 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 
 class InitializeSeeder extends Seeder
@@ -22,7 +20,9 @@ class InitializeSeeder extends Seeder
           'name'      => 'external',
           'email'     => 'external@local',
           'identification_code'  => '2222',
-          'password'  => Hash::make('123456'),
+          'password'  => '123456',
+          'admin_flg' => false,
+          'system_user' => true,
         ]);
         $user->save();
         $user = new User;
@@ -30,7 +30,9 @@ class InitializeSeeder extends Seeder
           'name'      => 'admin',
           'email'     => 'admin@local',
           'identification_code'  => '1111',
-          'password'  => Hash::make('123456'),
+          'password'  => '123456',
+          'admin_flg' => true,
+          'system_user' => true,
         ]);
         $user->save();
     }

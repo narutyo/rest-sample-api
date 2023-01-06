@@ -44,6 +44,9 @@ Route::middleware(['api', 'cors'])->group(function () {
 
     Route::prefix('/users')->group(function () {
       Route::get('', [UserController::class, 'index']);
+      Route::post('', [UserController::class, 'store']);
+      Route::put('/{user}', [UserController::class, 'update']);
+      Route::delete('/{user}', [UserController::class, 'delete']);
     });
 
     Route::prefix('/sample')->group(function () {

@@ -17,6 +17,7 @@ class LoginController extends AppBaseController
       'uuid'  => $user->uuid,
       'name'  => $user->name,
       'identification_code'  => $user->identification_code,
+      'admin'  => $user->admin_flg,
     );
 
     return response(['user' => $ret], 200);

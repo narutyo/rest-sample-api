@@ -17,8 +17,10 @@ return new class extends Migration
             $table->id();
             $table->uuid('uuid')->unique();
             $table->string('name');
-            $table->string('email')->unique();
-            $table->string('identification_code')->unique();
+            $table->string('email')->nullable();
+            $table->string('identification_code');
+            $table->boolean('admin_flg')->default(false);
+            $table->boolean('system_user')->default(false);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
